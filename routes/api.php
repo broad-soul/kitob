@@ -1,0 +1,116 @@
+<?php
+
+use Illuminate\Http\Request;
+
+Route::middleware('auth:api')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
+Route::group(['namespace' => 'Auth'], function () {
+    Route::post('register', 'RegisterController');
+    Route::post('login', 'LoginController');
+    Route::post('logout', 'LogoutController')->middleware('auth:api');
+});
+
+Route::post('/new_resident', 'ResidentsController@create');
+Route::post('/new_non_resident', 'NonResidentsController@create');
+Route::post('/remove_files', 'SpaController@destroy');
+Route::post('/check_recaptcha', 'UserController@check_recaptcha');
+Route::get('/main', 'SpaController@main');
+
+Route::group(['middleware' => 'auth:api'], function () {
+    Route::get('/get_residents', 'ResidentsController@get_all');
+    Route::post('/delete_resident', 'ResidentsController@destroy');
+    Route::get('/admin_show_resident/{id}', 'ResidentsController@get_one');
+    Route::post('/download_residents', 'ResidentsController@download_exel');
+    Route::get('/get_non_residents', 'NonResidentsController@get_all');
+    Route::post('/delete_non_resident', 'NonResidentsController@destroy');
+    Route::get('/admin_show_non_resident/{id}', 'NonResidentsController@get_one');
+    Route::post('/download_non_residents', 'NonResidentsController@download_exel');
+    Route::post('/download_file', 'SpaAdminController@download_file');
+    Route::post('/main_store', 'SpaAdminController@main_store');
+    Route::post('/titles_store', 'SpaAdminController@titles_store');
+    Route::post('/new_question', 'QuestionController@create');
+    Route::get('/get_question/{id}', 'QuestionController@edit');
+    Route::post('/update_question', 'QuestionController@update');
+    Route::post('/delete_question/{id}', 'QuestionController@destroy');
+    Route::post('/new_image_gallery', 'GalleryController@create');
+    Route::post('/delete_image_gallery', 'GalleryController@destroy');
+    Route::post('/about_us_create', 'AboutUsController@create');
+    Route::post('/create_event', 'EventsController@create');
+    Route::post('/update_event', 'EventsController@update');
+    Route::post('/delete_event/{id}', 'EventsController@destroy');
+    Route::post('/create_teacher', 'TeachersController@create');
+    Route::post('/change_teacher', 'TeachersController@update');
+    Route::post('/delete_teacher/{id}', 'TeachersController@destroy');
+    Route::get('/get_teacher/{id}', 'TeachersController@edit');
+    Route::post('/update_resident_instruction', 'ResidentsController@update_instruction');
+    Route::post('/update_non_resident_instruction', 'NonResidentsController@update_instruction');
+    Route::post('/create_partner', 'PartnersController@create');
+    Route::post('/update_partner', 'PartnersController@update');
+    Route::post('/delete_partner/{id}', 'PartnersController@destroy');
+    Route::post('/create_extra-classes', 'ExtraClassesController@create');
+    Route::post('/update_extra-classes', 'ExtraClassesController@update');
+    Route::post('/delete_extra-classes/{id}', 'ExtraClassesController@destroy');
+    Route::post('/create_contests', 'ContestsController@create');
+    Route::post('/update_contests', 'ContestsController@update');
+    Route::post('/delete_contests/{id}', 'ContestsController@destroy');
+    Route::post('/create_statistics', 'StatisticsController@create');
+    Route::post('/update_statistics', 'StatisticsController@update');
+    Route::post('/delete_statistics/{id}', 'StatisticsController@destroy');
+    Route::post('/create_regulations', 'RegulationsController@create');
+    Route::post('/update_regulations', 'RegulationsController@update');
+    Route::post('/delete_regulations/{id}', 'RegulationsController@destroy');
+    Route::post('/save_contacts', 'ContactsController@save');
+    Route::post('/create_category', 'Admin\CategoriesController@store');
+    Route::get('/edit_category/{id}', 'Admin\CategoriesController@edit');
+    Route::post('/update_category', 'Admin\CategoriesController@update');
+    Route::post('/delete_category/{id}', 'Admin\CategoriesController@destroy');
+    Route::post('/create_tag', 'Admin\TagsController@store');
+    Route::get('/edit_tag/{id}', 'Admin\TagsController@edit');
+    Route::post('/update_tag', 'Admin\TagsController@update');
+    Route::post('/delete_tag/{id}', 'Admin\TagsController@destroy');
+    Route::post('/create_post', 'Admin\PostsController@store');
+    Route::get('/edit_post/{id}', 'Admin\PostsController@edit');
+    Route::post('/update_post', 'Admin\PostsController@update');
+    Route::post('/delete_post/{id}', 'Admin\PostsController@destroy');
+    Route::post('/change_password', 'Auth\ResetPasswordController@change_password');
+    Route::post('/change_email', 'Auth\VerificationController@email_verify');
+});
+
+Route::post('/get_main_page_admin', 'SpaAdminController@get_main');
+Route::post('/main_get', 'SpaController@main_get');
+Route::post('/get_titles', 'SpaController@get_titles');
+Route::post('/get_logo', 'SpaController@get_logo');
+Route::get('/get_about_us', 'AboutUsController@get');
+Route::get('/get_questions', 'QuestionController@get_all');
+Route::get('/get_image_gallery', 'GalleryController@get_all');
+Route::get('/get_events', 'EventsController@get_all');
+Route::get('/get_event/{id}', 'EventsController@get_one');
+Route::get('/get_teachers', 'TeachersController@all');
+Route::get('/get_event/{id}', 'EventsController@edit');
+Route::get('/get_resident_instruction', 'ResidentsController@get_instruction');
+Route::get('/get_non_resident_instruction', 'NonResidentsController@get_instruction');
+Route::get('/partners/all', 'PartnersController@get_all');
+Route::get('/partners/show/{id}', 'PartnersController@get_one');
+Route::get('/extra-classes/all', 'ExtraClassesController@get_all');
+Route::get('/extra-classes/show/{id}', 'ExtraClassesController@get_one');
+Route::get('/contests/all', 'ContestsController@get_all');
+Route::get('/contests/show/{id}', 'ContestsController@get_one');
+Route::get('/statistics/all', 'StatisticsController@get_all');
+Route::get('/statistics/show/{id}', 'StatisticsController@get_one');
+Route::get('/regulations/all', 'RegulationsController@get_all');
+Route::get('/regulations/show/{id}', 'RegulationsController@get_one');
+Route::get('/get_contacts', 'ContactsController@get');
+Route::get('/get_categories', 'Admin\CategoriesController@get_all');
+Route::get('/get_tags', 'Admin\TagsController@get_all');
+Route::get('/get_posts', 'Admin\PostsController@get_all');
+Route::get('/show_post/{id}', 'Admin\PostsController@show');
+Route::get('/get_posts_client', 'Admin\PostsController@get_all_client');
+Route::get('/views_post/{id}', 'Admin\PostsController@views');
+Route::get('/show_post_client/{id}', 'Admin\PostsController@show_client');
+Route::get('/get_category_posts/{id}', 'Admin\PostsController@get_category_posts');
+Route::get('/get_tag_posts/{id}', 'Admin\PostsController@get_tag_posts');
+Route::get('/email_confirmation/{token}', 'Auth\VerificationController@email_confirmation');
+Route::post('/password_reset_email', 'Auth\ResetPasswordController@password_reset_email');
+Route::post('/password_reset', 'Auth\ResetPasswordController@password_reset');
